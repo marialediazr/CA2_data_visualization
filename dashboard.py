@@ -298,10 +298,8 @@ st.plotly_chart(fig_genre_preference, use_container_width=True)
 # Visualization 7: Top Movies based on the decade
 st.header("7. Top Movies based on the decade")
 st.write("To wrap things up, we’ve got the top recommendations based on the decade each movie was released. Use the dropdown menu to select a decade and explore the top 20 highest-rated movies from that period. Enjoy the journey through cinematic history!")
-
 movies_decades = movies_graphs.copy()
 movies_decades['decade'] = (movies_decades['year'] // 10) * 10
-movies_decades = movies_decades.sort_values(by=['decade', 'average_rating'], ascending=[True, False])
 unique_decades = sorted(movies_decades['decade'].unique())
 color_palette = px.colors.qualitative.Bold
 decade_colors = {decade: color_palette[i % len(color_palette)] for i, decade in enumerate(unique_decades)}
@@ -309,7 +307,7 @@ fig_decade_preference = go.Figure()
 for decade in unique_decades:
     filtered_movies = movies_decades[movies_decades['decade'] == decade].copy()
     filtered_movies = filtered_movies.sort_values(by='average_rating', ascending=False).head(20)
-    
+    filtered_movies = filtered_movies.iloc[::-1]
     fig_decade_preference.add_trace(
         go.Bar(
             x=filtered_movies['average_rating'],
