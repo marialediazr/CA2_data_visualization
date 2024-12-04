@@ -1,6 +1,9 @@
 streamlit
 pandas
-plotly
+numpy
 matplotlib
-chardet
 seaborn
+plotly
+chart-studio
+chardet
+cufflinks
