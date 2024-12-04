@@ -106,8 +106,8 @@ movies2['year'] = movies2['year'].astype(int)
 st.title("Movie Analytics Dashboard")
 st.write("Welcome to the Movie Analytics Dashboard! Dive into interactive charts that reveal movie trends by genre and release year. The dataset features 2,500 films released between 1922 and 2014, with ratings powered by over 90,000 movie enthusiasts. That’s a lot of opinions, so you know we’ve got all the favorites covered! Ready to explore what movies people love the most? Let’s go!")
 
-# Visualization 1: Top 20 Movies by Rating
-st.header("1. Top 20 Movies by Rating")
+# Visualization 1: Top 20 Movies by rating
+st.header("1. Top 20 Movies by rating")
 st.write("This chart highlights the top 20 highest-rated movies ever! It’s proof that classics never go out of style. The oldest film on the list dates back to 1950, while the newest one hit screens in 2011. Drama steals the spotlight with 13 hits, followed by crime with 8, and thriller with 7. Hover over each bar to uncover fun details about these legendary films!")
 top_movies = movies_graphs.sort_values(by='average_rating', ascending=False).head(20)
 fig_top_movies = px.bar(
@@ -117,15 +117,16 @@ fig_top_movies = px.bar(
     orientation='h',
     color='genres',
     labels={'average_rating': 'Average Rating', 'title': 'Movie Title', 'genres': 'Genre'},
-    title='Top 20 Movies of All Time Based on Rating',
+    title='Top 20 Movies of all time based on rating',
     color_discrete_sequence=px.colors.qualitative.Bold)
 fig_top_movies.update_layout(
     height=800,
-    title_x=0.5,
+    title_x=0.0,
+    title_font_size=25,
     yaxis=dict(categoryorder='total ascending'))
 st.plotly_chart(fig_top_movies, use_container_width=True)
 
-# Visualization 2: Number of Movies per Genre
+# Visualization 2: Number of Movies per genre
 st.header("2. Number of Movies per genre")
 st.write("This chart takes a closer look at how many movies were released in each genre. Drama leads the pack with 1,160 titles—almost half of the entire dataset! Comedy comes in hot with 950 films, while thriller claims the third spot with 639 movies. Hover over each bar to check out more details about your favorite genres!")
 df_genres = movies_graphs.copy()
@@ -141,10 +142,13 @@ fig_genres = px.bar(
     labels={"Genre": "Movie Genre", "Number of Movies": "Number of Movies"},
     color="Genre",
     color_discrete_sequence=px.colors.qualitative.Bold)
+fig_genres.update_layout(
+    title_x=0.0,
+    title_font_size=25)
 st.plotly_chart(fig_genres, use_container_width=True)
 
-# Visualization 3: Year vs Average rating
-st.header("3. Year vs Average rating")
+# Visualization 3: Year vs Average rating 
+st.header("3. Movies by year of release and average rating")
 st.write("This plot connects the year a movie was released to its average rating. Each dot represents a movie, and you can hover over it to see its name, genre, and rating. Explore and find out which movies stood out in their time!")
 movies_graphs['year'] = movies_graphs['year'].astype(int)
 fig_year_avg = px.scatter(
@@ -153,9 +157,12 @@ fig_year_avg = px.scatter(
     y='average_rating',
     color='genres',
     hover_data=['title'],
-    title='Year vs Average rating',
+    title='Movies by year of release and average rating',
     labels={'year': 'Year', 'average_rating': 'Average Rating', 'genres': 'Genre'},
     color_discrete_sequence=px.colors.qualitative.Bold)
+fig_year_avg.update_layout(
+    title_x=0.0,
+    title_font_size=25)
 st.plotly_chart(fig_year_avg, use_container_width=True)
 
 # Visualization 4: Movies released and average rating per year
@@ -183,7 +190,8 @@ fig_movies_avg_rating.add_trace(
         yaxis='y2'))
 fig_movies_avg_rating.update_layout(
     title='Movies released and average rating per year',
-    title_x=0.5,
+    title_x=0.0,
+    title_font_size=25,
     xaxis=dict(
         title='Year',
         tickmode='array',
@@ -224,19 +232,18 @@ fig_genre_popularity.update_layout(
     height=600,
     title={
         'text': '<b>Changes in genres popularity over the years</b>',
-        'x': 0.5,
-        'xanchor': 'center',
-        'yanchor': 'top'},
+        'x': 0.0,
+        'xanchor': 'left',
+        'yanchor': 'top',
+        'font': {'size': 25}},
     xaxis_title='Movie Genre',
     yaxis_title='Number of Movies',
     legend_title='Movie Genre')
 st.plotly_chart(fig_genre_popularity, use_container_width=True)
 
-
 # Visualization 6: Top Movies based on your genre preference
 st.header("6. Top Movies based on your genre preference")
 st.write("Now it’s your turn! Pick from the dropdown menu your favorite genre and check out the top 20 movies in that category. Have fun exploring!")
-
 movies_df = pd.DataFrame(movies_graphs)
 movies_df = movies_df.sort_values(by='average_rating', ascending=False).copy()
 unique_genres = set()
@@ -245,7 +252,6 @@ unique_genres = sorted(unique_genres)
 color_palette = px.colors.qualitative.Bold
 genre_colors = {genre: color_palette[i % len(color_palette)] for i, genre in enumerate(unique_genres)}
 max_movies_displayed = 20
-
 fig_genre_preference = go.Figure()
 for genre in unique_genres:
     filtered_movies = movies_df[movies_df['genres'].str.contains(genre)].copy()
@@ -274,11 +280,12 @@ dropdown_buttons_genres = [
         'args': [
             {'visible': [trace.name == genre for trace in fig_genre_preference.data]},
             {
-                'title': f"<b>Top 20 {genre} Movies Based on Ratings</b><br><span style='font-size:16px;'>Select the genre you would like to display</span>"}],}
+                'title': f"<b>Top 20 {genre} Movies based on ratings</b><br><span style='font-size:16px;'>Select the genre you would like to display</span>"}],}
     for genre in unique_genres]
 fig_genre_preference.update_layout(
-    title="<b>Top 20 Action Movies Based on Ratings</b><br><span style='font-size:16px;'>Select the genre you would like to display</span>",
-    title_x=0.5,
+    title="<b>Top 20 Action Movies based on ratings</b><br><span style='font-size:16px;'>Select the genre you would like to display</span>",
+    title_x=0.0,
+    title_font_size=25,
     xaxis=dict(title='Average Rating', range=[0, 5]),
     yaxis=dict(title='Movie Titles', automargin=True),
     template='plotly_white',
@@ -331,11 +338,12 @@ dropdown_buttons_decades = [
         'args': [
             {'visible': [trace.name == f"{decade}s" for trace in fig_decade_preference.data]},
             {
-                'title': f"<b>Top 20 Movies of the {decade}s Based on Ratings</b><br><span style='font-size:16px;'>Select the decade you would like to display</span>"}],}
+                'title': f"<b>Top 20 Movies of the {decade}s based on ratings</b><br><span style='font-size:16px;'>Select the decade you would like to display</span>"}],}
     for decade in unique_decades]
 fig_decade_preference.update_layout(
-    title="<b>Top 20 Movies of the 1920s Based on Ratings</b><br><span style='font-size:16px;'>Select the decade you would like to display</span>",
-    title_x=0.5,
+    title="<b>Top 20 Movies of the 1920s based on ratings</b><br><span style='font-size:16px;'>Select the decade you would like to display</span>",
+    title_x=0.0,
+    title_font_size=25,
     xaxis=dict(title='Average Rating', range=[0, 5]),
     yaxis=dict(title='Movie Titles', automargin=True),
     template='plotly_white',
