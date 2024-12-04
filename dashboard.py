@@ -147,7 +147,7 @@ fig_genres.update_layout(
     title_font_size=25)
 st.plotly_chart(fig_genres, use_container_width=True)
 
-# Visualization 3: Year vs Average rating 
+# Visualization 3: Movies by year of release and average rating
 st.header("3. Movies by year of release and average rating")
 st.write("This plot connects the year a movie was released to its average rating. Each dot represents a movie, and you can hover over it to see its name, genre, and rating. Explore and find out which movies stood out in their time!")
 movies_graphs['year'] = movies_graphs['year'].astype(int)
